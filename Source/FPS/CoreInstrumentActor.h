@@ -1,0 +1,66 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "CoreInstrumentActor.generated.h"
+
+UCLASS(Abstract)
+class FPS_API ABaseInstrumentActor : public AActor
+{
+	GENERATED_BODY()
+	
+
+public:	
+	// Sets default values for this actor's properties
+	ABaseInstrumentActor();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (DisplayName = "Static Mesh"))
+		UStaticMeshComponent* VisualMesh;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+public:
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Instrument")
+		void OnIstrumentUsed(AActor* Interacted_Actor);
+
+	UFUNCTION(BlueprintCallable, Category = "Instrument")
+		void UseInstrument(AActor* InteractedActor, float& Spent_Stamina, float& Next_Use_Delay);
+
+protected:
+	virtual void InstrumentUsed();
+
+public:
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Instrument Name"))
+		FName InstrName;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Quick Access Image"))
+		UTexture2D* QAImage;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Stamina Cost Per Use (%)", ClampMin = "0", ClampMax = "100"))
+		float Stamina_Cost_Per_Use;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument")
+		float Use_Delay;	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Spawn Transform"))
+		FTransform SpwnTransform;
+
+	
+	
+	
+	
+		
+
+private:
+	float StaminaCost, UseDelay;
+
+public:
+	bool IsPossibleToUse;
+};
