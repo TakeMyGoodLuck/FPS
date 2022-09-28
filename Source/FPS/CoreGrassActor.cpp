@@ -68,6 +68,7 @@ void ACoreGrassActor::GrowGrass(bool &IsMax)
 			break;
 		case (2):
 			SetActorRelativeScale3D(FVector(1.f, 1.f, 1.f));
+			State++;
 			IsMaxState = true;
 			IsMax = IsMaxState;
 		};

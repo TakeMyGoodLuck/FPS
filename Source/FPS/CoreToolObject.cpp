@@ -31,6 +31,8 @@ void UCoreToolObject::ToolBroken()
 
 void UCoreToolObject::Repair()
 {
+	ToolHealth = 100.f;
+	IsPossibleToUse = true;
 }
 
 void UCoreToolObject::GetHealth(float& Health)
