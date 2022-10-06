@@ -9,9 +9,30 @@
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class EGroundType : uint8
+{
+	Grassed,
+	Weeded,
+	Plowed,
+	Seeded
+};
+
 UCLASS()
 class FPS_API ACoreGroundA : public ACoreInteractableActor
 {
 	GENERATED_BODY()
 	
+
+public:
+
+	ACoreGroundA();
+
+public:
+
+	UPROPERTY(BlueprintReadWrite, Category = "Ground", meta = (DisplayName = "Ground Type"))
+		TEnumAsByte<EGroundType> GroundType;
+
+
 };

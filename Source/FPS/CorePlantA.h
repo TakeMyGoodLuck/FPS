@@ -21,11 +21,14 @@ public:
 	
 public:
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Plant Actor", meta = (DisplayName = "Plant Name"))
+		FName Name;
+
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Plant Actor", meta = (DisplayName = "Default Growth Speed (Sec/State)", ClampMin = "0"))
 		float GrowthSpd;
 	UPROPERTY(BlueprintReadOnly, Category = "Plant Actor", meta = (DisplayName = "Growth Acceleration", ClampMin = "0"))
 		float GrAccel;
-	UPROPERTY(EditAnywhere, Category = "Plant Actor", meta = (DisplayName = "Growth States Count", ClampMin = "0"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Plant Actor", meta = (DisplayName = "Growth States Count", ClampMin = "0"))
 		int MaxStates;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Plant Actor", meta = (DisplayName = "Number of Seeds", ClampMin = "0"))

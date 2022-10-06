@@ -11,6 +11,7 @@ ACorePlantA::ACorePlantA()
 	SeedsAmount = 5.f;
 	HarvestPerSeed = 10.f;
 	MaxStates = 3;
+
 }
 
 void ACorePlantA::GetSpd(float& Growth_Speed)

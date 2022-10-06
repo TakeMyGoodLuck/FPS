@@ -6,7 +6,16 @@
 #include "UObject/NoExportTypes.h"
 #include "CoreInstrumentObject_.generated.h"
 
-
+UENUM(BlueprintType)
+enum class EInstrumentType : uint8
+{
+	Scythe,
+	Hoe,
+	Rake,
+	Seeds,
+	Bucket,
+	Gloves
+};
 /**
  * 
  */
@@ -29,26 +38,36 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Stamina Cost Per Use (%)", ClampMin = "0", ClampMax = "100"))
 		float Stamina_Cost_Per_Use;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument")
-		float Use_Delay;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Interact Time", ClampMin = "0"))
+		float InteractTime;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Release Time", ClampMin = "0"))
+		float ReleaseTime;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Spawn Transform"))
 		FTransform SpwnTransform;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instrument", meta = (DisplayName = "Instrument"))
+		TEnumAsByte<EInstrumentType> InstrType;
+	
+
+
+		
 public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Instrument")
 		void OnIstrumentUsed();
 
 	UFUNCTION(BlueprintCallable, Category = "Instrument")
-		void UseInstrument(float& Spent_Stamina, float& Next_Use_Delay);
+		void UseInstrument(float& Spent_Stamina, float& Interact_Time, float& Release_Time);
 
 protected:
 
 	virtual void InstrumentUsed();
-		
-
+	
+	
 public:
 
 	bool IsPossibleToUse;
 	
 };
+

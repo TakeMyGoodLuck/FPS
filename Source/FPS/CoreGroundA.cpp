@@ -3,3 +3,9 @@
 
 #include "CoreGroundA.h"
 
+ACoreGroundA::ACoreGroundA()
+{
+
+}
+
+
