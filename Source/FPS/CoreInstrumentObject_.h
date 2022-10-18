@@ -49,7 +49,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instrument", meta = (DisplayName = "Instrument"))
 		TEnumAsByte<EInstrumentType> InstrType;
 	
-
+	UPROPERTY(BlueprintReadWrite, Category = "Instrument", meta = (DisplayName = "Selector Index", ClampMin = "0"))
+		int SlctIndex;
 
 		
 public:

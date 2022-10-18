@@ -12,6 +12,7 @@ UCoreInstrumentObject_::UCoreInstrumentObject_()
 	Stamina_Cost_Per_Use = 10.f;
 	InteractTime = 0.5f;
 	ReleaseTime = 1.5f;
+	SlctIndex = 0;
 }
 
 void UCoreInstrumentObject_::UseInstrument(float& Spent_Stamina, float& Interact_Time, float& Release_Time)
