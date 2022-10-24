@@ -42,6 +42,9 @@ public:
 		float InteractTime;
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Release Time", ClampMin = "0"))
 		float ReleaseTime;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Energy Cost Per Use (%)", ClampMin = "0", ClampMax = "100"))
+		float EnergyCost;
+	
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Instrument", meta = (DisplayName = "Spawn Transform"))
 		FTransform SpwnTransform;
@@ -59,7 +62,7 @@ public:
 		void OnIstrumentUsed();
 
 	UFUNCTION(BlueprintCallable, Category = "Instrument")
-		void UseInstrument(float& Spent_Stamina, float& Interact_Time, float& Release_Time);
+		void UseInstrument(float& Spent_Stamina, float &Spent_Energy, float& Interact_Time, float& Release_Time);
 
 protected:
 
