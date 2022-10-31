@@ -16,14 +16,25 @@ UCoreInstrumentObject_::UCoreInstrumentObject_()
 	EnergyCost = 3;
 }
 
-void UCoreInstrumentObject_::UseInstrument(float& Spent_Stamina, float& Spent_Energy, float& Interact_Time, float& Release_Time)
+void UCoreInstrumentObject_::UseInstrument(ACoreInteractableActor* Interacted_Actor, bool& Success, float& Stamina_Cost, float& Energy_Cost, float& Interact_Time, float& Release_Time)
 {
-	InstrumentUsed();
-	Spent_Stamina = Stamina_Cost_Per_Use;
-	Spent_Energy = EnergyCost;
-	Interact_Time = InteractTime;
-	Release_Time  = ReleaseTime;
-	OnIstrumentUsed();
+	if (IsPossibleToUse == true)
+	{
+		Interacted_Actor->Interact(this, Success);
+		if (Success == true)
+		{
+			InstrumentUsed();
+			Stamina_Cost = Stamina_Cost_Per_Use;
+			Energy_Cost = EnergyCost;
+			Interact_Time = InteractTime;
+			Release_Time = ReleaseTime;
+			OnIstrumentUsed();
+		}
+
+		
+	}
+	else
+		Success = false;
 }
 
 void UCoreInstrumentObject_::InstrumentUsed()

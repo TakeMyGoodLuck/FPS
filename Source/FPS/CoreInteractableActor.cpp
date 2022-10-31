@@ -25,5 +25,14 @@ void ACoreInteractableActor::Tick(float DeltaTime)
 
 }
 
+void ACoreInteractableActor::Interact_Implementation(UCoreInstrumentObject_* Instrument, bool& Success)
+{
+	
+}
 
 
+
+void ACoreInteractableActor::CInteract(UCoreInstrumentObject_* Instrument, bool& Success)
+{
+	Interact(Instrument, Success);
+}

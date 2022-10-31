@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "CoreInteractableActor.h"
 #include "CoreInstrumentObject_.generated.h"
 
 UENUM(BlueprintType)
@@ -14,7 +15,8 @@ enum class EInstrumentType : uint8
 	Rake,
 	Seeds,
 	Bucket,
-	Gloves
+	Gloves,
+	Hammer
 };
 /**
  * 
@@ -62,7 +64,9 @@ public:
 		void OnIstrumentUsed();
 
 	UFUNCTION(BlueprintCallable, Category = "Instrument")
-		void UseInstrument(float& Spent_Stamina, float &Spent_Energy, float& Interact_Time, float& Release_Time);
+		void UseInstrument(ACoreInteractableActor* Interacted_Actor, bool& Success, float& Stamina_Cost, float& Energy_Cost, float& Interact_Time, float& Release_Time);
+
+	
 
 protected:
 

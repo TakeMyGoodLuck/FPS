@@ -23,6 +23,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintNativeEvent)
+		void Interact(UCoreInstrumentObject_* Instrument, bool& Success);
 	
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnInteracted();
 
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Interact"))
+		void CInteract(UCoreInstrumentObject_* Instrument, bool& Success);
 };
