@@ -23,6 +23,13 @@ UCorePlayerStats::UCorePlayerStats()
 	fEDelay = 0.f;
 	fEnergy = 1.f;
 	EnergyRate = 3.f;
+	fEnergyTimerSpd = 1.f;
+	fHungry = 1.f;
+	HungryRate = 2.f;
+	HungryLow = 20.f;
+	fThirst = 1.f;
+	ThirstRate = 7.f;
+	ThirstLow = 20.f;
 }
 
 
@@ -30,7 +37,14 @@ UCorePlayerStats::UCorePlayerStats()
 void UCorePlayerStats::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	GI = Cast<UCoreGameInstance>(GetWorld()->GetGameInstance());
+	float z;
+	GI->GetTimeSpeed(z);
+	fEnergyTimerSpd = 60 / z;
+	FEnergyTimer();
+	FHungryTimer(60 / z);
+	FThirstTimer(60 / z);
 	// ...
 	
 }
@@ -53,12 +67,11 @@ void UCorePlayerStats::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		FRestore();
 	}
 
-	if (bEnergy == true)
-	{
-		FEnergy(DeltaTime);
-	}
+
 }
 
+
+//Stmina
 
 void UCorePlayerStats::StaminaReduce(float StaminaCost)
 {
@@ -123,13 +136,15 @@ void UCorePlayerStats::FDelay(float DTime)
 
 }
 
+//Energy
+
 void UCorePlayerStats::FEnergy(float DTime)
 {
 	fEDelay = fEDelay + DTime;
 
 	if (fEDelay >= 10)
 	{
-		EnergyReduce(EnergyRate);
+		ReduceEnergy(EnergyRate);
 		fEDelay = 0.f;
 		
 	}
@@ -142,7 +157,7 @@ void UCorePlayerStats::GetEnergy(float& Energy)
 	Energy = fEnergy;
 }
 
-void UCorePlayerStats::EnergyReduce(float EnergyCost)
+void UCorePlayerStats::ReduceEnergy(float EnergyCost)
 {
 	fEnergy = fEnergy - (EnergyCost / 100);
 
@@ -160,5 +175,172 @@ void UCorePlayerStats::EnergyReduce(float EnergyCost)
 void UCorePlayerStats::EnergyRestore()
 {
 	fEnergy = 1.f;
+	GetWorld()->GetTimerManager().ClearTimer(EnergyTimerHandle);
+	FEnergyTimer();
 	OnEnergyReduced(fEnergy);
+}
+
+void UCorePlayerStats::Sleep()
+{
+	GI->SetTimerSpeed(25);
+	GetWorld()->GetTimerManager().ClearTimer(EnergyTimerHandle);
+	FDelayTimer(2 * 60 / 25);
+	float z;
+	GI->GetTimerSpeed(z);
+	FHungryTimer(60 / z / 25);
+	FThirstTimer(60 / z / 25);
+}
+
+void UCorePlayerStats::FEnergyTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(EnergyTimerHandle, this, &UCorePlayerStats::FReduceEnergy, fEnergyTimerSpd, false);
+}
+
+void UCorePlayerStats::FReduceEnergy()
+{
+	fEnergy = fEnergy - (EnergyRate/100);
+	
+	FEnergyTimer();
+
+	if (fEnergy <= 0)
+	{
+		fEnergy = 0;
+		GetWorld()->GetTimerManager().ClearTimer(EnergyTimerHandle);
+	}
+	OnEnergyReduced(fEnergy);
+}
+
+
+void UCorePlayerStats::FDelayTimer(float Time)
+{
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, this, &UCorePlayerStats::FEndSleep, Time, false);
+}
+
+void UCorePlayerStats::FEndSleep()
+{
+	GI->SetTimerSpeed(1.f);
+	float z;
+	GI->GetTimeSpeed(z);
+	fEnergy = 1.f;
+	OnEnergyReduced(fEnergy);
+	FHungryTimer(60 / z);
+	FThirstTimer(60 / z);
+
+}
+
+
+//Hungry
+
+void UCorePlayerStats::FHungryDecrease()
+{
+	fHungry = fHungry - (HungryRate/100);
+	if (fHungry <= HungryLow/100 && bHungryLow == false)
+	{
+		bHungryLow = true;
+		OnHungryLow(fHungry);
+	}
+
+	if (fHungry <= 0)
+	{
+		fHungry = 0;
+		GetWorld()->GetTimerManager().ClearTimer(HungryHandle);
+		OnHungryMax();
+
+	}
+	else
+	{
+		float z, y;
+		GI->GetTimerSpeed(y);
+		GI->GetTimeSpeed(z);
+		z = 60 / z / y;
+		FHungryTimer(z);
+	}
+
+	OnHungry(fHungry);
+}
+
+void UCorePlayerStats::FeedHungry(float FoodValue)
+{
+	fHungry = fHungry + (FoodValue / 100);
+	if (fHungry > HungryLow / 100 && bHungryLow == true)
+	{
+		bHungryLow = false;
+	}
+
+	if (fHungry >= 1.f)
+	{
+		fHungry = 1.f;
+	}
+
+	float z, y;
+	GI->GetTimerSpeed(y);
+	GI->GetTimeSpeed(z);
+	z = 60 / z / y;
+	FHungryTimer(z);
+
+	OnHungry(fHungry);
+}
+
+void UCorePlayerStats::FHungryTimer(float Time)
+{
+	GetWorld()->GetTimerManager().SetTimer(HungryHandle, this, &UCorePlayerStats::FHungryDecrease, Time, false);
+}
+
+
+//Thirst
+
+void UCorePlayerStats::FThirstDecrease()
+{
+	fThirst = fThirst - (ThirstRate / 100);
+	if (fThirst <= ThirstLow / 100 && bThirstLow == false)
+	{
+		bThirstLow = true;
+		OnHungryLow(fThirst);
+	}
+
+	if (fThirst <= 0)
+	{
+		fThirst = 0;
+		GetWorld()->GetTimerManager().ClearTimer(ThirstHandle);
+		OnThirstMax();
+
+	}
+	else
+	{
+		float z, y;
+		GI->GetTimerSpeed(y);
+		GI->GetTimeSpeed(z);
+		z = 60 / z / y;
+		FThirstTimer(z);
+	}
+
+	OnThirst(fThirst);
+}
+
+void UCorePlayerStats::FThirstTimer(float Time)
+{
+	GetWorld()->GetTimerManager().SetTimer(ThirstHandle, this, &UCorePlayerStats::FThirstDecrease, Time, false);
+}
+
+void UCorePlayerStats::FeedThirst(float DrinkValue)
+{
+	fThirst = fThirst + (DrinkValue / 100);
+	if (fThirst > ThirstLow / 100 && bThirstLow == true)
+	{
+		bThirstLow = false;
+	}
+
+	if (fThirst >= 1.f)
+	{
+		fThirst = 1.f;
+	}
+
+	float z, y;
+	GI->GetTimerSpeed(y);
+	GI->GetTimeSpeed(z);
+	z = 60 / z / y;
+	FThirstTimer(z);
+	
+
+	OnThirst(fThirst);
 }

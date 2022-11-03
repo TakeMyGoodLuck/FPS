@@ -5,12 +5,14 @@
 
 UCoreGameInstance::UCoreGameInstance()
 {
-
+	TimerSpd = 1.f;
 }
 
-void UCoreGameInstance::FIncrementTime()
+
+
+void UCoreGameInstance::FIncrementTime(float AddMinutes)
 {
-	STime.IncrementTime();
+	STime.IncrementTime(AddMinutes);
 }
 
 void UCoreGameInstance::GetTime(FTimeStruct& Time)
@@ -18,3 +20,24 @@ void UCoreGameInstance::GetTime(FTimeStruct& Time)
 	Time = STime;
 }
 
+void UCoreGameInstance::GetTimerSpeed(float& TimerSpeed)
+{
+	TimerSpeed = TimerSpd;
+}
+
+void UCoreGameInstance::SetTimerSpeed(float TimerSpeed)
+{
+	TimerSpd = TimerSpeed;
+
+	
+}
+
+void UCoreGameInstance::SetTimeSpeed(float TimeSpeed)
+{
+	TimeSpd = TimeSpeed;
+}
+
+void UCoreGameInstance::GetTimeSpeed(float& TimeSpeed)
+{
+	TimeSpeed = TimeSpd;
+}

@@ -24,32 +24,28 @@ struct FTimeStruct
 		int Days;
 
 	
-	void IncrementTime()
+	void IncrementTime(float AddMinutes)
 	{
-
-		Minutes++;
-		if (Minutes == 60)
-		{
-			Minutes = 0;
-			Hours++;
-			if (Hours == 24)
-			{
-				Hours = 0;
-				Days++;
-			}
-		}
-
+		
+		Minutes = Minutes + static_cast<int>(AddMinutes);
+		Hours = Hours + Minutes / 60;
+		Days = Days + Hours / 24;
+		Hours = Hours % 24;
+		Minutes = Minutes % 60;
+		
 	}
 
 	FTimeStruct()
 	{
 		Minutes = 0;
-		Hours = 0;
+		Hours = 9;
 		Days = 0;
 
 	}
-	
+
 };
+
+
 
 
 UCLASS()
@@ -63,12 +59,42 @@ public:
 	
 public:
 
-	void FIncrementTime();
+	
+
+	// Properties:
 
 	UPROPERTY(BlueprintReadOnly)
 		FTimeStruct STime;
 
+
+
+	
+
+protected:
+
+	float TimerSpd;
+	float TimeSpd;
+
+	
+	//Functions:
+	
+public:
+
+	
+
+	void FIncrementTime(float AddMinutes);
+
 	UFUNCTION(BlueprintPure)
-		void GetTime(FTimeStruct & Time);
+		void GetTime(FTimeStruct& Time);
+
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Time Speed"))
+		void GetTimerSpeed(float& TimerSpeed);
+
+	
+	void SetTimerSpeed(float TimerSpeed);
+
+	void SetTimeSpeed(float TimeSpeed);
+
+	void GetTimeSpeed(float& TimeSpeed);
 	
 };
