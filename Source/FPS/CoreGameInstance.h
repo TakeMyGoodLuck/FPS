@@ -11,39 +11,6 @@
  */
 
 
-USTRUCT(BlueprintType)
-struct FTimeStruct
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadWrite)
-		int Minutes;
-	UPROPERTY(BlueprintReadWrite)
-		int Hours;
-	UPROPERTY(BlueprintReadWrite)
-		int Days;
-
-	
-	void IncrementTime(float AddMinutes)
-	{
-		
-		Minutes = Minutes + static_cast<int>(AddMinutes);
-		Hours = Hours + Minutes / 60;
-		Days = Days + Hours / 24;
-		Hours = Hours % 24;
-		Minutes = Minutes % 60;
-		
-	}
-
-	FTimeStruct()
-	{
-		Minutes = 0;
-		Hours = 9;
-		Days = 0;
-
-	}
-
-};
 
 
 
@@ -63,8 +30,7 @@ public:
 
 	// Properties:
 
-	UPROPERTY(BlueprintReadOnly)
-		FTimeStruct STime;
+
 
 
 
@@ -76,7 +42,7 @@ protected:
 	float TimeSpd;
 
 	
-	//Functions:
+		//Functions:
 	
 public:
 
@@ -84,8 +50,7 @@ public:
 
 	void FIncrementTime(float AddMinutes);
 
-	UFUNCTION(BlueprintPure)
-		void GetTime(FTimeStruct& Time);
+
 
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "Get Time Speed"))
 		void GetTimerSpeed(float& TimerSpeed);
@@ -96,5 +61,15 @@ public:
 	void SetTimeSpeed(float TimeSpeed);
 
 	void GetTimeSpeed(float& TimeSpeed);
+
+
+
+
+		//Properties
+
+public:
+
 	
+
+
 };

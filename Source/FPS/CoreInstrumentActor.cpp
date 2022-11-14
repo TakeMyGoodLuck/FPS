@@ -11,8 +11,12 @@ ABaseInstrumentActor::ABaseInstrumentActor()
 	
 	
 
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
+	SceneComponent->SetupAttachment(RootComponent);
+
+
 	VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	VisualMesh->SetupAttachment(RootComponent);
+	VisualMesh->SetupAttachment(SceneComponent);
 
 
 

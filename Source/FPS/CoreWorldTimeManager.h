@@ -5,9 +5,47 @@
 #include "CoreMinimal.h"
 #include "Engine/DirectionalLight.h"
 #include "Misc/OutputDeviceNull.h"
-#include "CoreGameInstance.h"
 #include "GameFramework/Actor.h"
 #include "CoreWorldTimeManager.generated.h"
+
+USTRUCT(BlueprintType)
+struct FTimeStruct
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+		int Minutes;
+	UPROPERTY(BlueprintReadWrite)
+		int Hours;
+	UPROPERTY(BlueprintReadWrite)
+		int Days;
+
+	float secs;
+	
+
+
+	void IncrementTime(float Time)
+	{
+
+		
+		Minutes = static_cast<int>(Time);
+		Hours = Minutes / 60;
+		Days = Hours / 24;
+		Hours = Hours % 24;
+		Minutes = Minutes % 60;
+
+
+	}
+
+	FTimeStruct()
+	{
+		Minutes = 0;
+		Hours = 0;
+		Days = 0;
+
+	}
+
+};
 
 
 UCLASS()
@@ -34,7 +72,6 @@ public:
 private:
 
 	FTimerHandle WorldTimerHandle;
-	UCoreGameInstance* GI;
 	FOutputDeviceNull ar;
 
 protected:
@@ -62,20 +99,24 @@ protected:
 
 private:
 
-	void Timer();
-	void SetGITimeSpeed();
+	
 
-	UFUNCTION()
-		void SetTime();
+	
 
 	void UpdateSunPosition(float Minutes);
 
-	void CalculateTime();
+
+	
+	float fCounter;
+
+public:
 
 	float TimeSpeed;
 
+	void CalculateTime();
+
+	UPROPERTY(BlueprintReadOnly)
+		FTimeStruct STime;
 
 
-
-	
 };

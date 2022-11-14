@@ -13,16 +13,15 @@ ACoreWorldTimeManager::ACoreWorldTimeManager()
 	TimeSpeed = 1.f;
 	TimerSpd = 1.f;
 	TimeRate = 12.f;
+	fCounter = 0.f;
 }
 
 // Called when the game starts or when spawned
 void ACoreWorldTimeManager::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	CalculateTime();
-	GI = Cast<UCoreGameInstance>(GetGameInstance());
-	SetGITimeSpeed();
-	Timer();
 	
 	
 }
@@ -31,39 +30,17 @@ void ACoreWorldTimeManager::BeginPlay()
 void ACoreWorldTimeManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+	fCounter = fCounter + (DeltaTime*TimeSpeed);
+
+	STime.IncrementTime(fCounter);
+
+	UpdateSunPosition(fCounter);
 }
 
-void ACoreWorldTimeManager::Timer()
-{
-	GetWorldTimerManager().SetTimer(WorldTimerHandle, this, &ACoreWorldTimeManager::SetTime, 1/TimerSpd, true);
-	
-	
-}
 
-void ACoreWorldTimeManager::SetTime()
-{
-	GI->FIncrementTime(TimeSpeed);
-	float X;
-	GI->GetTimerSpeed(X);
-	if (X != TimerSpd)
-	{
-		TimerSpd = X;
-		GI->SetTimerSpeed(TimerSpd);
-		Timer();
-	}
 
-	
-	float Minute = static_cast<float>((GI->STime.Hours * 60) + (GI->STime.Minutes));
-	UpdateSunPosition(Minute);
-	
-}
 
-void ACoreWorldTimeManager::SetGITimeSpeed()
-{
-	GI->SetTimerSpeed(TimerSpd);
-	GI->SetTimeSpeed(TimeSpeed);
-}
 
 void ACoreWorldTimeManager::UpdateSunPosition(float Minutes)
 {
@@ -87,5 +64,5 @@ void ACoreWorldTimeManager::GetTSPD(float& SPD)
 
 void ACoreWorldTimeManager::CalculateTime()
 {
-	TimeSpeed = 86400 / TimeRate / 3600;
+	TimeSpeed = 24 / TimeRate;
 }

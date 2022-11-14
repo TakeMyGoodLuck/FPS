@@ -16,6 +16,10 @@ public:
 	// Sets default values for this actor's properties
 	ABaseInstrumentActor();
 
+
+	UPROPERTY(VisibleAnywhere)
+		USceneComponent* SceneComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (DisplayName = "Static Mesh"))
 		UStaticMeshComponent* VisualMesh;
 

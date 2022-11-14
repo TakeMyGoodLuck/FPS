@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CoreGameInstance.h"
+#include "CoreWorldTimeManager.h"
 #include "Components/ActorComponent.h"
 #include "CorePlayerStats.generated.h"
 
@@ -27,11 +27,11 @@ public:
 
 private:
 
-	UCoreGameInstance* GI;
 	FTimerHandle EnergyTimerHandle;
 	FTimerHandle DelayHandle;
 	FTimerHandle HungryHandle;
 	FTimerHandle ThirstHandle;
+	FTimerHandle EnergyRestoreHandle;
 
 public:
 
@@ -63,11 +63,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player Stats", meta = (DisplayName = "Restore Energy"))
 		void EnergyRestore();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats", meta = (DispalyName = "On Energy Reduced"))
-		void OnEnergyReduced(float Energy);
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats", meta = (DispalyName = "On Energy"))
+		void OnEnergy(float Energy);
 
-	UFUNCTION(BlueprintCallable, Category = "Player Stats", meta = (DisplayName = "Sleep"))
-		void Sleep();
+	
 
 		//Hungry
 
@@ -89,7 +88,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Thirst", meta = (DispalyName = "On Thirst Low"))
 		void OnThirstLow(float Hungry);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Thirst", meta = (DispalyName = "On HThirst Max"))
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Thirst", meta = (DispalyName = "On Thirst Max"))
 		void OnThirstMax();
 
 	UFUNCTION(BlueprintCallable, Category = "Player Stats|Thirst", meta = (DisplayName = "Feed Thirst"))
@@ -98,7 +97,19 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Thirst", meta = (DispalyName = "On Thirst"))
 		void OnThirst(float Thirst);
 
-	
+
+		//Sleeping
+
+	UFUNCTION(BlueprintCallable, Category = "Player Stats|Sleeping", meta = (DisplayName = "Sleep"))
+		void Sleep(float SleepTime);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Sleeping", meta = (DisplayName = "Wake On Hunger"))
+		void WakeOnHunger();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Sleeping", meta = (DisplayName = "Wake On Thirst"))
+		void WakeOnThirst();
+
+
 
 	//UProperties
 
@@ -123,21 +134,33 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Player Stats| Thirst", meta = (DisplayName = "Thirst Low Limit (%)", ClampMin = "0", ClampMax = "100"))
 		float ThirstLow;
 
+	UPROPERTY(BlueprintReadWrite, Category = "PlayerStats")
+		ACoreWorldTimeManager* TimeManager;
+
+	UPROPERTY(EditAnywhere, Category = "Player Stats|Sleeping", meta = (DisplayName = "Sleep Duration (Real Time Seconds)", ClampMin = "0"))
+		float SleepDuration;
+
+	UPROPERTY(EditAnywhere, Category = "Player Stats|Sleeping", meta = (DisplayName = "Sleeping Energy Recovery (%/Hour)", ClampMin = "0", ClampMax = "100"))
+		float EnergyRecover;
+
+	
+
 public:
 
 	float fStamina, fWait, x, fEnergy, fEDelay, fHungry, fThirst;
-	bool bRestore, bDelay, bEnergy, bHungryLow, bThirstLow;
+	bool bRestore, bDelay, bEnergy, bHungryLow, bThirstLow, bSleeping;
 	float fEnergyTimerSpd;
+	float fTimeSpeed;
 	
 	
 	void FRestore();
 	void FDelay(float DTime);
 
 
-	void FEnergy(float DTime);
+	
 	void FReduceEnergy();
-	void FEnergyTimer();
-	void FDelayTimer(float Time);
+	void FEnergyTimer(float Time);
+	void FSleepTimer(float Time);
 	void FEndSleep();
 
 
@@ -147,4 +170,8 @@ public:
 
 	void FThirstDecrease();
 	void FThirstTimer(float Time);
+
+	void FEnergyRestore();
+	void FEnergyRestoreTimer(float Time);
+
 };

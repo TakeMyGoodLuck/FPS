@@ -12,13 +12,10 @@ UCoreGameInstance::UCoreGameInstance()
 
 void UCoreGameInstance::FIncrementTime(float AddMinutes)
 {
-	STime.IncrementTime(AddMinutes);
+	
 }
 
-void UCoreGameInstance::GetTime(FTimeStruct& Time)
-{
-	Time = STime;
-}
+
 
 void UCoreGameInstance::GetTimerSpeed(float& TimerSpeed)
 {
@@ -41,3 +38,4 @@ void UCoreGameInstance::GetTimeSpeed(float& TimeSpeed)
 {
 	TimeSpeed = TimeSpd;
 }
+
