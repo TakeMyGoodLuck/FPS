@@ -20,7 +20,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		USceneComponent* SceneComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (DisplayName = "Static Mesh"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (DisplayName = "Static Mesh"))
 		UStaticMeshComponent* VisualMesh;
 
 protected:

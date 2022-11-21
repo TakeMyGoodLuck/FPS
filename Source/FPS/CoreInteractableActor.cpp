@@ -3,11 +3,20 @@
 
 #include "CoreInteractableActor.h"
 
+
 // Sets default values
 ACoreInteractableActor::ACoreInteractableActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
+	SceneComponent->SetupAttachment(RootComponent);
+
+
+	VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	VisualMesh->SetupAttachment(SceneComponent);
+
 
 }
 
@@ -31,8 +40,7 @@ void ACoreInteractableActor::Interact_Implementation(UCoreInstrumentObject_* Ins
 }
 
 
-
 void ACoreInteractableActor::CInteract(UCoreInstrumentObject_* Instrument, bool& Success)
 {
-	Interact(Instrument, Success);
+
 }

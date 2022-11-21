@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/StaticMeshActor.h"
+#include "CoreQuestActor.h"
 #include "CoreInteractableActor.generated.h"
 
 UCLASS()
-class FPS_API ACoreInteractableActor : public AStaticMeshActor
+class FPS_API ACoreInteractableActor : public ACoreQuestActor
 {
 	GENERATED_BODY()
 	
@@ -23,6 +23,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+	UPROPERTY(VisibleAnywhere)
+		USceneComponent* SceneComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (DisplayName = "Static Mesh"))
+		UStaticMeshComponent* VisualMesh;
+
 	UFUNCTION(BlueprintNativeEvent)
 		void Interact(UCoreInstrumentObject_* Instrument, bool& Success);
 	
@@ -31,4 +38,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Interact"))
 		void CInteract(UCoreInstrumentObject_* Instrument, bool& Success);
+
+
+
+
 };
