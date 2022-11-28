@@ -32,6 +32,8 @@ private:
 	FTimerHandle HungryHandle;
 	FTimerHandle ThirstHandle;
 	FTimerHandle EnergyRestoreHandle;
+	FTimerHandle TemperaturHandle;
+	FTimerHandle OverheatHandle;
 
 public:
 
@@ -110,6 +112,22 @@ public:
 		void WakeOnThirst();
 
 
+		//Temperature
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Temperature", meta = (DisplayName = "On Overheat"))
+		void OnOverheat();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Temperature", meta = (DisplayName = "On Temperature Updated"))
+		void OnTemperatureUpdated(float Temperature);
+
+	UFUNCTION(BlueprintCallable, Category = "Player Stats|Temperature", meta = (DisplayName = "Set Heating State"))
+		void SetHeatingState(bool Heating);
+
+
+
+
+
+
 
 	//UProperties
 
@@ -143,12 +161,18 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Player Stats|Sleeping", meta = (DisplayName = "Sleeping Energy Recovery (%/Hour)", ClampMin = "0", ClampMax = "100"))
 		float EnergyRecover;
 
+
+	UPROPERTY(EditAnywhere, Category = "Player Stats|Temperatur", meta = (DisplayName = "Heating up on Sun(%/sec)", ClampMin = "0", ClampMax = "100"))
+		float HeatingUp;
+
+	UPROPERTY(EditAnywhere, Category = "Player Stats|Temperatur", meta = (DisplayName = "CoolindDown (%/sec)", ClampMin = "0", ClampMax = "100"))
+		float Cooling;
 	
 
 public:
 
-	float fStamina, fWait, x, fEnergy, fEDelay, fHungry, fThirst;
-	bool bRestore, bDelay, bEnergy, bHungryLow, bThirstLow, bSleeping;
+	float fStamina, fWait, x, fEnergy, fEDelay, fHungry, fThirst, fHeat;
+	bool bRestore, bDelay, bEnergy, bHungryLow, bThirstLow, bSleeping, bHeatingUp, bOverheat;
 	float fEnergyTimerSpd;
 	float fTimeSpeed;
 	
@@ -173,5 +197,12 @@ public:
 
 	void FEnergyRestore();
 	void FEnergyRestoreTimer(float Time);
+
+
+	void FTemperatureTimer(float Time);
+	void FTemperature();
+	void FOverheat();
+		
+
 
 };

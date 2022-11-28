@@ -34,6 +34,12 @@ UCorePlayerStats::UCorePlayerStats()
 	SleepDuration = 5.f;
 	EnergyRecover = 5.f;
 	bSleeping = false;
+
+	fHeat = 0.f;
+	HeatingUp = 0.3f;
+	Cooling = 1.f;
+	bHeatingUp = false;
+	bOverheat = false;
 }
 
 
@@ -55,6 +61,7 @@ void UCorePlayerStats::BeginPlay()
 		FEnergyTimer(60 / fTimeSpeed);
 		FHungryTimer(60 / fTimeSpeed);
 		FThirstTimer(60 / fTimeSpeed);
+		
 		// ...
 	}
 }
@@ -369,6 +376,7 @@ void UCorePlayerStats::Sleep(float SleepTime)
 		FHungryTimer(60 / fTimeSpeed);
 		FThirstTimer(60 / fTimeSpeed);
 		FEnergyRestoreTimer(60 / fTimeSpeed);
+		FTemperatureTimer(1 / fTimeSpeed);
 	}
 	
 }
@@ -386,9 +394,9 @@ void UCorePlayerStats::FEndSleep()
 	TimeManager->CalculateTime();
 	fTimeSpeed = TimeManager->TimeSpeed;
 	FEnergyTimer(60 / fTimeSpeed);
-	FEnergyRestoreTimer(60 / fTimeSpeed);
 	FHungryTimer(60 / fTimeSpeed);
 	FThirstTimer(60 / fTimeSpeed);
+	FTemperatureTimer(1 / fTimeSpeed);
 	
 
 }
@@ -416,5 +424,73 @@ void UCorePlayerStats::FEnergyRestore()
 
 
 	OnEnergy(fEnergy);
+
+}
+
+
+
+
+void UCorePlayerStats::FTemperatureTimer(float Time)
+{
+	GetWorld()->GetTimerManager().SetTimer(TemperaturHandle, this, &UCorePlayerStats::FTemperature, Time, true);
+}
+
+void UCorePlayerStats::FTemperature()
+{
+	if (bHeatingUp)
+	{
+		fHeat = fHeat + (HeatingUp / 100);
+		if (fHeat >= 1)
+		{
+			fHeat = 1;
+			if (!bOverheat)
+			{
+				bOverheat = true;
+				GetWorld()->GetTimerManager().SetTimer(OverheatHandle, this, &UCorePlayerStats::FOverheat, 5.f, false);
+			}
+			
+		}
+
+	}
+
+	else
+	{
+		fHeat = fHeat - (Cooling / 100);
+		if (fHeat <= 0)
+		{
+			fHeat = 0;
+		}
+		if (bOverheat)
+		{
+			bOverheat = false;
+			GetWorld()->GetTimerManager().ClearTimer(OverheatHandle);
+		}
+
+	}
+
+	OnTemperatureUpdated(fHeat);
+}
+
+void UCorePlayerStats::SetHeatingState(bool Heating)
+{
+	GetWorld()->GetTimerManager().ClearTimer(TemperaturHandle);
+	bHeatingUp = Heating;
+	FTemperatureTimer(1 / fTimeSpeed);
+
+
+}
+
+void UCorePlayerStats::FOverheat()
+{
+	
+	fEnergy = 0.01f;
+	OnEnergy(fEnergy);
+	fThirst = 0.01f;
+	OnThirst(fThirst);
+	fHungry = 0.01f;
+	OnHungry(fHungry);
+
+	OnOverheat();
+
 
 }

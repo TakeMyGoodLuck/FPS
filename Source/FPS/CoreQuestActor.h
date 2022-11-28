@@ -49,4 +49,7 @@ public:
 		TArray<FQuestStruct> Quests;
 
 	int QuestIndex;
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void SetInteractable(bool Interactable);
 };

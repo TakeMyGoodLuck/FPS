@@ -29,7 +29,7 @@ void UCoreQuestSubsystem::UpdateQuest(ACoreQuestActor* QuestActor)
 		CurrentQuest.QuestActor = QuestActor->Quests[CurrentQuest.QuestIndex].NextQuestActor;
 		CurrentQuest.QuestIndex = QuestActor->Quests[CurrentQuest.QuestIndex].ActorNextTaskIndex;
 		CurrentQuest.QuestActor->QuestIndex = CurrentQuest.QuestIndex;
-
+		CurrentQuest.QuestActor->SetInteractable(true);
 
 		OnQuestChanged.Broadcast(CurrentQuest.QuestActor->Quests[CurrentQuest.QuestIndex].QuestDescription);
 
@@ -46,5 +46,22 @@ void UCoreQuestSubsystem::SetFirstQuest(ACoreQuestActor* QuestActor, int QuestIn
 	CurrentQuest.QuestActor->QuestIndex = CurrentQuest.QuestIndex;
 
 	OnQuestChanged.Broadcast(CurrentQuest.QuestActor->Quests[CurrentQuest.QuestIndex].QuestDescription);
+
+}
+
+void UCoreQuestSubsystem::CheckQuestActor(ACoreQuestActor* ActorToCheck, bool& Result)
+{
+	if (CurrentQuest.QuestActor != NULL)
+	{
+		if (CurrentQuest.QuestActor == ActorToCheck)
+			Result = true;
+		else
+			Result = false;
+	}
+	else
+	{
+		Result = false;
+	}
+	
 
 }

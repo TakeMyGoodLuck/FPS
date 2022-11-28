@@ -49,6 +49,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetFirstQuest(ACoreQuestActor* QuestActor, int QuestIndex);
 
+	UFUNCTION(BlueprintCallable)
+		void CheckQuestActor(ACoreQuestActor* ActorToCheck, bool& Result);
 	
 	UPROPERTY(BlueprintAssignable)
 		FOnQuestChanged OnQuestChanged;
