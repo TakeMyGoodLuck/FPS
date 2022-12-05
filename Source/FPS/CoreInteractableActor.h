@@ -24,14 +24,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-	UPROPERTY(VisibleAnywhere)
-		USceneComponent* SceneComponent;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (DisplayName = "Static Mesh"))
 		UStaticMeshComponent* VisualMesh;
 
 	UFUNCTION(BlueprintNativeEvent)
-		void Interact(UCoreInstrumentObject_* Instrument, bool& Success);
+		void InteractCheck(UCoreInstrumentObject_* Instrument, bool& Success);
 	
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnInteracted();
@@ -39,7 +38,8 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Interact"))
 		void CInteract(UCoreInstrumentObject_* Instrument, bool& Success);
 
-
+	UFUNCTION(BlueprintImplementableEvent)
+		void Interact(UCoreInstrumentObject_* Instrument);
 
 
 };

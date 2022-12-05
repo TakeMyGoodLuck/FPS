@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CoreInstrumentObject_.h"
+#include "CoreInstrumentActor.h"
 #include "CoreToolObject.generated.h"
 
 /**
@@ -30,6 +31,13 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument|Tool", meta = (DisplayName = "RepairTime (sec)", ClampMin = "0"))
 		float RepairTime;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument|Tool")
+		TSubclassOf<ABaseInstrumentActor> ToolActorClass;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Instrument|Tool")
+		ABaseInstrumentActor* ToolActor;
+	
+
 protected:
 
 	virtual void InstrumentUsed() override;
@@ -53,5 +61,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Instrument|Tool", meta = (DisplayName = "Repair Tool"))
 		void RepairTool();
+
+	UFUNCTION(BlueprintCallable)
+		void BindInteract();
 	
 };

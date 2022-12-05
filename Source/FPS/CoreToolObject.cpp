@@ -21,6 +21,12 @@ void UCoreToolObject::InstrumentUsed()
 		ToolHealth = 0;
 		ToolBroken();
 	}
+
+	if (ToolActor)
+		ToolActor->OnInstrumentUsed(InteractTime);
+
+	
+
 }
 
 void UCoreToolObject::ToolBroken()
@@ -48,4 +54,9 @@ void UCoreToolObject::GetIsPossibleToUse(bool& Return_Value)
 void UCoreToolObject::RepairTool()
 {
 	Repair();
+}
+
+void UCoreToolObject::BindInteract()
+{
+	ToolActor->OnInstrumentInteracted.AddUniqueDynamic(this, &UCoreInstrumentObject_::Interacted);
 }

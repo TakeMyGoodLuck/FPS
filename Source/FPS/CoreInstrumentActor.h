@@ -6,6 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "CoreInstrumentActor.generated.h"
 
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInstrumentInteracted);
+
+
 UCLASS(Abstract)
 class FPS_API ABaseInstrumentActor : public AActor
 {
@@ -32,4 +37,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "InstrumentActor")
+		void OnInstrumentUsed(float UseSpeed);
+
+
+	UPROPERTY(BlueprintAssignable)
+		FOnInstrumentInteracted OnInstrumentInteracted;
+
+	UFUNCTION(BlueprintCallable)
+		void CallDelegate();
 };

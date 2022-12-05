@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/WidgetComponent.h"
+#include "UObject/ConstructorHelpers.h"
 #include "GameFramework/Actor.h"
 #include "CoreQuestActor.generated.h"
 
@@ -44,12 +46,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(VisibleAnywhere)
+		USceneComponent* SceneComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		UWidgetComponent* Pointer;
 
 	UPROPERTY(EditAnywhere, Category = "Quest")
 		TArray<FQuestStruct> Quests;
 
 	int QuestIndex;
 
-	UFUNCTION(BlueprintImplementableEvent)
-		void SetInteractable(bool Interactable);
+
 };

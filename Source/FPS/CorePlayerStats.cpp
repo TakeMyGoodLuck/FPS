@@ -49,18 +49,21 @@ void UCorePlayerStats::BeginPlay()
 	Super::BeginPlay();
 
 
-	if (TimeManager != NULL)
+	if (TimeManager)
 	{
 		
 
 		fTimeSpeed = TimeManager->TimeSpeed;
 
 		
-
 		
+
+		GetWorld()->GetTimerManager().SetTimer(HungryHandle, this, &UCorePlayerStats::FHungryDecrease, 60 / fTimeSpeed, true);
+		GetWorld()->GetTimerManager().SetTimer(ThirstHandle, this, &UCorePlayerStats::FThirstDecrease, 60 / fTimeSpeed, true);
+		GetWorld()->GetTimerManager().SetTimer(EnergyTimerHandle, this, &UCorePlayerStats::FReduceEnergy, 60 / fTimeSpeed, true);
 		FEnergyTimer(60 / fTimeSpeed);
-		FHungryTimer(60 / fTimeSpeed);
-		FThirstTimer(60 / fTimeSpeed);
+		//FHungryTimer(60 / fTimeSpeed);
+		//FThirstTimer(60 / fTimeSpeed);
 		
 		// ...
 	}
@@ -207,10 +210,6 @@ void UCorePlayerStats::FReduceEnergy()
 		GetWorld()->GetTimerManager().ClearTimer(EnergyTimerHandle);
 	}
 
-	else
-	{
-		FEnergyTimer(60 / fTimeSpeed);
-	}
 
 	OnEnergy(fEnergy);
 }
@@ -245,14 +244,7 @@ void UCorePlayerStats::FHungryDecrease()
 		}
 
 	}
-	else
-	{
-		
-		
-		
-		
-		FHungryTimer(60 / fTimeSpeed);
-	}
+
 
 	OnHungry(fHungry);
 }
@@ -272,8 +264,8 @@ void UCorePlayerStats::FeedHungry(float FoodValue)
 			fHungry = 1.f;
 		}
 
-
-		FHungryTimer(60 / fTimeSpeed);
+		
+		GetWorld()->GetTimerManager().SetTimer(HungryHandle, this, &UCorePlayerStats::FHungryDecrease, 60 / fTimeSpeed, true);
 
 		OnHungry(fHungry);
 	}
@@ -308,11 +300,11 @@ void UCorePlayerStats::FThirstDecrease()
 		}
 
 	}
-	else
-	{
+	//else
+	//{
 		
-		FThirstTimer(60 / fTimeSpeed);
-	}
+		//FThirstTimer(60 / fTimeSpeed);
+	//}
 
 	OnThirst(fThirst);
 }
@@ -337,8 +329,8 @@ void UCorePlayerStats::FeedThirst(float DrinkValue)
 			fThirst = 1.f;
 		}
 
-
-		FThirstTimer(60 / fTimeSpeed);
+		
+		GetWorld()->GetTimerManager().SetTimer(ThirstHandle, this, &UCorePlayerStats::FThirstDecrease, 60 / fTimeSpeed, true);
 
 
 		OnThirst(fThirst);
@@ -350,35 +342,52 @@ void UCorePlayerStats::FeedThirst(float DrinkValue)
 
 void UCorePlayerStats::Sleep(float SleepTime)
 {
-	if (fHungry <= 0 || fThirst <= 0)
-	{
-		if (fHungry <= 0)
-		{
-			WakeOnHunger();
-		}
-
-		if (fThirst <= 0)
-		{
-			WakeOnThirst();
-		}
-
-	}
-
-	else
+	if (OverheatSleep)
 	{
 		
-		bSleeping = true;
-		GetWorld()->GetTimerManager().ClearTimer(EnergyTimerHandle);
-
 		fTimeSpeed = 60 * SleepTime / SleepDuration;
 		FSleepTimer(SleepDuration);
 		TimeManager->TimeSpeed = fTimeSpeed;
-		FHungryTimer(60 / fTimeSpeed);
-		FThirstTimer(60 / fTimeSpeed);
-		FEnergyRestoreTimer(60 / fTimeSpeed);
-		FTemperatureTimer(1 / fTimeSpeed);
+
 	}
-	
+	else
+	{
+		if (fHungry <= 0 || fThirst <= 0)
+		{
+			if (fHungry <= 0)
+			{
+				WakeOnHunger();
+			}
+
+			if (fThirst <= 0)
+			{
+				WakeOnThirst();
+			}
+
+		}
+
+		else
+		{
+
+			bSleeping = true;
+			GetWorld()->GetTimerManager().ClearTimer(EnergyTimerHandle);
+			GetWorld()->GetTimerManager().ClearTimer(HungryHandle);
+			GetWorld()->GetTimerManager().ClearTimer(ThirstHandle);
+			GetWorld()->GetTimerManager().ClearTimer(TemperaturHandle);
+
+
+			fTimeSpeed = 60 * SleepTime / SleepDuration;
+			FSleepTimer(SleepDuration);
+			TimeManager->TimeSpeed = fTimeSpeed;
+			//FHungryTimer(60 / fTimeSpeed);
+			//FThirstTimer(60 / fTimeSpeed);
+			FEnergyRestoreTimer(60 / fTimeSpeed);
+			FTemperatureTimer(1 / fTimeSpeed);
+
+			GetWorld()->GetTimerManager().SetTimer(HungryHandle, this, &UCorePlayerStats::FHungryDecrease, 60 / fTimeSpeed, true);
+			GetWorld()->GetTimerManager().SetTimer(ThirstHandle, this, &UCorePlayerStats::FThirstDecrease, 60 / fTimeSpeed, true);
+		}
+	}
 }
 
 void UCorePlayerStats::FSleepTimer(float Time)
@@ -388,14 +397,18 @@ void UCorePlayerStats::FSleepTimer(float Time)
 
 void UCorePlayerStats::FEndSleep()
 {
+	if (OverheatSleep)
+		OverheatSleep = false;
+
 	bSleeping = false;
 	GetWorld()->GetTimerManager().ClearTimer(EnergyRestoreHandle);
+	
 
 	TimeManager->CalculateTime();
 	fTimeSpeed = TimeManager->TimeSpeed;
 	FEnergyTimer(60 / fTimeSpeed);
-	FHungryTimer(60 / fTimeSpeed);
-	FThirstTimer(60 / fTimeSpeed);
+	GetWorld()->GetTimerManager().SetTimer(HungryHandle, this, &UCorePlayerStats::FHungryDecrease, 60 / fTimeSpeed, true);
+	GetWorld()->GetTimerManager().SetTimer(ThirstHandle, this, &UCorePlayerStats::FThirstDecrease, 60 / fTimeSpeed, true);
 	FTemperatureTimer(1 / fTimeSpeed);
 	
 
@@ -428,7 +441,7 @@ void UCorePlayerStats::FEnergyRestore()
 }
 
 
-
+//Temperatur
 
 void UCorePlayerStats::FTemperatureTimer(float Time)
 {
@@ -489,8 +502,18 @@ void UCorePlayerStats::FOverheat()
 	OnThirst(fThirst);
 	fHungry = 0.01f;
 	OnHungry(fHungry);
+	OverheatSleep = true;
+	GetWorld()->GetTimerManager().ClearTimer(EnergyTimerHandle);
+	GetWorld()->GetTimerManager().ClearTimer(HungryHandle);
+	GetWorld()->GetTimerManager().ClearTimer(ThirstHandle);
+	GetWorld()->GetTimerManager().ClearTimer(EnergyRestoreHandle);
+	GetWorld()->GetTimerManager().ClearTimer(TemperaturHandle);
+	Sleep(5.f);
 
 	OnOverheat();
 
 
+
+
 }
+

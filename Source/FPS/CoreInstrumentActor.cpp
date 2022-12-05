@@ -36,3 +36,7 @@ void ABaseInstrumentActor::Tick(float DeltaTime)
 
 }
 
+void ABaseInstrumentActor::CallDelegate()
+{
+	OnInstrumentInteracted.Broadcast();
+}

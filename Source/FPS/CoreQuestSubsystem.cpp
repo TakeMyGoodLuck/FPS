@@ -29,7 +29,7 @@ void UCoreQuestSubsystem::UpdateQuest(ACoreQuestActor* QuestActor)
 		CurrentQuest.QuestActor = QuestActor->Quests[CurrentQuest.QuestIndex].NextQuestActor;
 		CurrentQuest.QuestIndex = QuestActor->Quests[CurrentQuest.QuestIndex].ActorNextTaskIndex;
 		CurrentQuest.QuestActor->QuestIndex = CurrentQuest.QuestIndex;
-		CurrentQuest.QuestActor->SetInteractable(true);
+		
 
 		OnQuestChanged.Broadcast(CurrentQuest.QuestActor->Quests[CurrentQuest.QuestIndex].QuestDescription);
 

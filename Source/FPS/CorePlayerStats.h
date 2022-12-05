@@ -35,6 +35,7 @@ private:
 	FTimerHandle TemperaturHandle;
 	FTimerHandle OverheatHandle;
 
+	FTimerManager TimerManager;
 public:
 
 	//UFuctions
@@ -172,7 +173,7 @@ public:
 public:
 
 	float fStamina, fWait, x, fEnergy, fEDelay, fHungry, fThirst, fHeat;
-	bool bRestore, bDelay, bEnergy, bHungryLow, bThirstLow, bSleeping, bHeatingUp, bOverheat;
+	bool bRestore, bDelay, bEnergy, bHungryLow, bThirstLow, bSleeping, bHeatingUp, bOverheat, OverheatSleep;
 	float fEnergyTimerSpd;
 	float fTimeSpeed;
 	
@@ -202,7 +203,11 @@ public:
 	void FTemperatureTimer(float Time);
 	void FTemperature();
 	void FOverheat();
+
+	
 		
-
-
+	//void Timer(FTimerHandle Handle, void (UCorePlayerStats::* Function)(), float Time, bool loop);
+	
 };
+
+

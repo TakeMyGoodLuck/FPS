@@ -10,8 +10,7 @@ ACoreInteractableActor::ACoreInteractableActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
-	SceneComponent->SetupAttachment(RootComponent);
+	
 
 
 	VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -34,7 +33,7 @@ void ACoreInteractableActor::Tick(float DeltaTime)
 
 }
 
-void ACoreInteractableActor::Interact_Implementation(UCoreInstrumentObject_* Instrument, bool& Success)
+void ACoreInteractableActor::InteractCheck_Implementation(UCoreInstrumentObject_* Instrument, bool& Success)
 {
 	
 }

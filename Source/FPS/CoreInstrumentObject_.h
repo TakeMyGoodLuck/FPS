@@ -22,7 +22,7 @@ enum class EInstrumentType : uint8
  * 
  */
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnInstrumentUsed, float, StaminaCost, float, Energy_Cost, float, Interact_Time, float, Release_Time);
 
 UCLASS(Blueprintable, Abstract)
 class FPS_API UCoreInstrumentObject_ : public UObject
@@ -66,7 +66,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Instrument")
 		void UseInstrument(ACoreInteractableActor* Interacted_Actor, bool& Success, float& Stamina_Cost, float& Energy_Cost, float& Interact_Time, float& Release_Time);
 
-	
+protected:
+
+	ACoreInteractableActor* InteractedActor;
 
 protected:
 
@@ -77,5 +79,13 @@ public:
 
 	bool IsPossibleToUse;
 	
+
+	UPROPERTY(BlueprintAssignable)
+		FOnInstrumentUsed OnInstrumentUsed;
+
+	UFUNCTION(BlueprintCallable)
+		void Interacted();
+
+
 };
 
