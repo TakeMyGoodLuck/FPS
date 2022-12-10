@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "CoreInteractableActor.h"
+#include "CoreInstrumentActor.h"
 #include "CoreInstrumentObject_.generated.h"
 
 UENUM(BlueprintType)
@@ -57,6 +58,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Instrument", meta = (DisplayName = "Selector Index", ClampMin = "0"))
 		int SlctIndex;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument|Tool")
+		TSubclassOf<ABaseInstrumentActor> ToolActorClass;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Instrument|Tool")
+		ABaseInstrumentActor* ToolActor;
+
 		
 public:
 
@@ -86,6 +93,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Interacted();
 
+	UFUNCTION(BlueprintCallable)
+		void BindInteract();
 
 };
 

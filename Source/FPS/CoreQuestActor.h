@@ -13,7 +13,10 @@ struct FQuestStruct
 {
 	GENERATED_BODY()
 
-		UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FText QuestCaption;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FText QuestDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -21,6 +24,9 @@ struct FQuestStruct
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int ActorNextTaskIndex;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int NextActorInteractType;
 
 	UPROPERTY(BlueprintReadOnly)
 		bool Completed;

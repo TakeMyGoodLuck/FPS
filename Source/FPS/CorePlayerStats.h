@@ -113,6 +113,18 @@ public:
 		void WakeOnThirst();
 
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Sleeping", meta = (DisplayName = "On Sleep Started"))
+		void OnSleepStarted();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Sleeping", meta = (DisplayName = "On Sleep Ended"))
+		void OnSleepEnded();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Sleeping", meta = (DisplayName = "On Overheat Sleep Ended"))
+		void OnOverheatSleepEnded();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Sleeping", meta = (DisplayName = "On Overheat Sleep Started"))
+		void OnOverheatSleepStarted();
+
+
 		//Temperature
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Player Stats|Temperature", meta = (DisplayName = "On Overheat"))

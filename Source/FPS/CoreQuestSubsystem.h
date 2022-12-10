@@ -10,17 +10,23 @@
 /**
  * 
  */
-struct CurrentQuestStruct
+USTRUCT(BlueprintType)
+struct FCurrentQuestStruct
 {
+	GENERATED_BODY()
 
+	UPROPERTY(BlueprintReadWrite)
 	ACoreQuestActor* QuestActor;
 
+	UPROPERTY(BlueprintReadWrite)
 	int QuestIndex;
+	UPROPERTY(BlueprintReadWrite)
+	int InteractType;
 	
 
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnQuestChanged, FText, QuestDescription);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnQuestChanged, FText, QuestCaption, FText, QuestDescription);
 
 UCLASS()
 class FPS_API UCoreQuestSubsystem : public UGameInstanceSubsystem
@@ -39,15 +45,15 @@ public:
 		
 private:
 
-		CurrentQuestStruct CurrentQuest;
+		FCurrentQuestStruct CurrentQuest;
 
 public:
 
 	UFUNCTION(BlueprintCallable)
-		void UpdateQuest(ACoreQuestActor* QuestActor);
+		void UpdateQuest(ACoreQuestActor* QuestActor, int InteractType);
 
 	UFUNCTION(BlueprintCallable)
-		void SetFirstQuest(ACoreQuestActor* QuestActor, int QuestIndex);
+		void SetFirstQuest(ACoreQuestActor* QuestActor, int QuestIndex, int InteractType);
 
 	UFUNCTION(BlueprintCallable)
 		void CheckQuestActor(ACoreQuestActor* ActorToCheck, bool& Result);
@@ -55,5 +61,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FOnQuestChanged OnQuestChanged;
 
+	UFUNCTION(BlueprintPure)
+		FCurrentQuestStruct GetCurrentQuest();
 
 };

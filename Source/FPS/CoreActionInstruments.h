@@ -26,7 +26,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument|Action Instrument", meta = (DisplayName = "Amount Per Use", ClampMin = "0"))
 		int amount;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Instrument|Action Instrument", meta = (DisplayName = "Object Filling", ClampMin = "0"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Instrument|Action Instrument", meta = (DisplayName = "Object Filling", ClampMin = "0"))
 		int filling;
 
 	virtual void InstrumentUsed() override;

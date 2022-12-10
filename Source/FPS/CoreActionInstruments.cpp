@@ -13,7 +13,13 @@ UCoreActionInstruments::UCoreActionInstruments()
 void UCoreActionInstruments::InstrumentUsed()
 {
 	if (filling > 0)
+	{
 		filling = filling - amount;
+		//if (ToolActor)
+			//ToolActor->OnInstrumentUsed(InteractTime);
+
+	}
+
 	else
 		OnEmptied();
 

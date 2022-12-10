@@ -32,6 +32,8 @@ void UCoreInstrumentObject_::UseInstrument(ACoreInteractableActor* Interacted_Ac
 				Interact_Time = InteractTime;
 				Release_Time = ReleaseTime;
 				OnIstrumentUsed();
+				if (ToolActor)
+					ToolActor->OnInstrumentUsed(InteractTime);
 			}
 
 		
@@ -50,4 +52,9 @@ void UCoreInstrumentObject_::Interacted()
 {
 	InteractedActor->Interact(this);
 	InteractedActor = NULL;
+}
+
+void UCoreInstrumentObject_::BindInteract()
+{
+	ToolActor->OnInstrumentInteracted.AddUniqueDynamic(this, &UCoreInstrumentObject_::Interacted);
 }

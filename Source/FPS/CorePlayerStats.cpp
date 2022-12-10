@@ -239,6 +239,7 @@ void UCorePlayerStats::FHungryDecrease()
 
 		if (bSleeping == true)
 		{
+			GetWorld()->GetTimerManager().ClearTimer(DelayHandle);
 			FEndSleep();
 			WakeOnHunger();
 		}
@@ -295,6 +296,7 @@ void UCorePlayerStats::FThirstDecrease()
 		OnThirstMax();
 		if (bSleeping == true)
 		{
+			GetWorld()->GetTimerManager().ClearTimer(DelayHandle);
 			FEndSleep();
 			WakeOnThirst();
 		}
@@ -348,7 +350,7 @@ void UCorePlayerStats::Sleep(float SleepTime)
 		fTimeSpeed = 60 * SleepTime / SleepDuration;
 		FSleepTimer(SleepDuration);
 		TimeManager->TimeSpeed = fTimeSpeed;
-
+		OnOverheatSleepStarted();
 	}
 	else
 	{
@@ -386,6 +388,8 @@ void UCorePlayerStats::Sleep(float SleepTime)
 
 			GetWorld()->GetTimerManager().SetTimer(HungryHandle, this, &UCorePlayerStats::FHungryDecrease, 60 / fTimeSpeed, true);
 			GetWorld()->GetTimerManager().SetTimer(ThirstHandle, this, &UCorePlayerStats::FThirstDecrease, 60 / fTimeSpeed, true);
+
+			OnSleepStarted();
 		}
 	}
 }
@@ -398,7 +402,12 @@ void UCorePlayerStats::FSleepTimer(float Time)
 void UCorePlayerStats::FEndSleep()
 {
 	if (OverheatSleep)
+	{
 		OverheatSleep = false;
+		OnOverheatSleepEnded();
+	}
+	else
+		OnSleepEnded();
 
 	bSleeping = false;
 	GetWorld()->GetTimerManager().ClearTimer(EnergyRestoreHandle);
@@ -411,7 +420,7 @@ void UCorePlayerStats::FEndSleep()
 	GetWorld()->GetTimerManager().SetTimer(ThirstHandle, this, &UCorePlayerStats::FThirstDecrease, 60 / fTimeSpeed, true);
 	FTemperatureTimer(1 / fTimeSpeed);
 	
-
+	
 }
 
 
