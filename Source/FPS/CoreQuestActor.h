@@ -35,6 +35,12 @@ struct FQuestStruct
 		bool Completed;
 
 	UPROPERTY(EditAnywhere)
+		bool Dialog;
+
+	UPROPERTY(EditAnywhere)
+		FText DialogText;
+
+	UPROPERTY(EditAnywhere)
 		bool Hint;
 
 	UPROPERTY(EditAnywhere)

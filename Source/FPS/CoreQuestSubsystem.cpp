@@ -54,6 +54,8 @@ void UCoreQuestSubsystem::UpdateQuest(ACoreQuestActor* QuestActor, int InteractT
 			if (CurrentQuest.QuestActor->Quests[CurrentQuest.QuestIndex].Tutorial == true)
 				ShowTutorial.Broadcast(CurrentQuest.QuestActor->Quests[CurrentQuest.QuestIndex].TutorialName, CurrentQuest.QuestActor->Quests[CurrentQuest.QuestIndex].TutorialText);
 			
+			if (CurrentQuest.QuestActor->Quests[CurrentQuest.QuestIndex].Dialog == true)
+				ShowDialog(CurrentQuest.QuestActor->Quests[CurrentQuest.QuestIndex].DialogText);
 		}
 		
 		
@@ -120,4 +122,9 @@ void UCoreQuestSubsystem::ShowHint(FText Body, FText InText)
 void UCoreQuestSubsystem::HideHint()
 {
 	CallHideHint.Broadcast();
+}
+
+void UCoreQuestSubsystem::ShowDialog(FText Dialog)
+{
+	CallDialog.Broadcast(Dialog);
 }

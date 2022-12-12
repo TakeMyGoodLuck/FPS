@@ -38,6 +38,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHideHint);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FShowTutorial, FText, Name, FText, Text);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShowDialog, FText, Text);
+
 UCLASS()
 class FPS_API UCoreQuestSubsystem : public UGameInstanceSubsystem
 {
@@ -83,6 +85,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FShowTutorial ShowTutorial;
 
+	UPROPERTY(BlueprintAssignable)
+		FShowDialog CallDialog;
+
 	UFUNCTION(BlueprintPure)
 		FCurrentQuestStruct GetCurrentQuest();
 
@@ -100,4 +105,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void HideHint();
 
+	UFUNCTION(BlueprintCallable)
+		void ShowDialog(FText Dialog);
 };
