@@ -50,7 +50,7 @@ void UCoreInstrumentObject_::InstrumentUsed()
 
 void UCoreInstrumentObject_::Interacted()
 {
-	InteractedActor->Interact(this);
+	InteractedActor->InstrumentUsed(this);
 	InteractedActor = NULL;
 }
 

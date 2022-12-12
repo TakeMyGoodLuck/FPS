@@ -142,6 +142,8 @@ public:
 
 
 
+
+
 	//UProperties
 
 	UPROPERTY(EditAnywhere, Category = "Player Stats", meta = (DisplayName = "0 stamina wait time (sec)", ClampMin = "0"))

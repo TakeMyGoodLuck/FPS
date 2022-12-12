@@ -39,7 +39,12 @@ void ACoreInteractableActor::InteractCheck_Implementation(UCoreInstrumentObject_
 }
 
 
-void ACoreInteractableActor::CInteract(UCoreInstrumentObject_* Instrument, bool& Success)
+void ACoreInteractableActor::UseInstrument(UCoreInstrumentObject_* Instrument, bool& Success)
 {
-	Interact(Instrument);
+	InstrumentUsed(Instrument);
+}
+
+void ACoreInteractableActor::Interact(UCoreInstrumentObject_* Instrument)
+{
+	Interacted(Instrument);
 }

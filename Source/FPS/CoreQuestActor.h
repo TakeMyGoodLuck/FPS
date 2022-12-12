@@ -28,10 +28,33 @@ struct FQuestStruct
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int NextActorInteractType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int AmountToComplete;
+
 	UPROPERTY(BlueprintReadOnly)
 		bool Completed;
 
+	UPROPERTY(EditAnywhere)
+		bool Hint;
 
+	UPROPERTY(EditAnywhere)
+		TArray<FText> HintText;
+
+	UPROPERTY(EditAnywhere, Category = "Tutorial")
+		bool Tutorial;
+
+	UPROPERTY(EditAnywhere, Category = "Tutorial")
+		FText TutorialName;
+
+	UPROPERTY(EditAnywhere, Category = "Tutorial")
+		FText TutorialText;
+
+	FQuestStruct()
+	{
+		AmountToComplete = 1;
+		Hint = false;
+		Tutorial = false;
+	}
 
 };
 

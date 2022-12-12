@@ -35,11 +35,18 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnInteracted();
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Interact"))
-		void CInteract(UCoreInstrumentObject_* Instrument, bool& Success);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Use Instrument"))
+		void UseInstrument(UCoreInstrumentObject_* Instrument, bool& Success);
 
 	UFUNCTION(BlueprintImplementableEvent)
+		void InstrumentUsed(UCoreInstrumentObject_* Instrument);
+
+	UFUNCTION(BlueprintCallable, Category = "Interactable")
 		void Interact(UCoreInstrumentObject_* Instrument);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Interactable")
+		void Interacted(UCoreInstrumentObject_* Instrument);
+
 
 
 };

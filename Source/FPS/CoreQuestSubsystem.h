@@ -23,10 +23,20 @@ struct FCurrentQuestStruct
 	UPROPERTY(BlueprintReadWrite)
 	int InteractType;
 	
+	UPROPERTY(BlueprintReadWrite)
+		int CurrentAmount;
 
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnQuestChanged, FText, QuestCaption, FText, QuestDescription);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnQuestChanged, FText, QuestCaption, FText, QuestDescription, int, AmountToComplete, int, CurrentAmount);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuestCompleted);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FShowHint, FText, BodyText, FText, IntText);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHideHint);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FShowTutorial, FText, Name, FText, Text);
 
 UCLASS()
 class FPS_API UCoreQuestSubsystem : public UGameInstanceSubsystem
@@ -61,7 +71,33 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FOnQuestChanged OnQuestChanged;
 
+	UPROPERTY(BlueprintAssignable)
+		FOnQuestCompleted OnQuestCompleted;
+
+	UPROPERTY(BlueprintAssignable)
+		FShowHint CallHint;
+
+	UPROPERTY(BlueprintAssignable)
+		FHideHint CallHideHint;
+
+	UPROPERTY(BlueprintAssignable)
+		FShowTutorial ShowTutorial;
+
 	UFUNCTION(BlueprintPure)
 		FCurrentQuestStruct GetCurrentQuest();
+
+	ACoreQuestActor* QuestHolder;
+
+	UFUNCTION(BlueprintCallable)
+		void SetQuestHolder(ACoreQuestActor* Actor);
+
+	UFUNCTION(BlueprintPure)
+		ACoreQuestActor* GetQuestHolder();
+
+	UFUNCTION(BlueprintCallable)
+		void ShowHint(FText Body, FText InText);
+
+	UFUNCTION(BlueprintCallable)
+		void HideHint();
 
 };
