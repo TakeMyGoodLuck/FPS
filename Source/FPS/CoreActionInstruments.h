@@ -31,6 +31,7 @@ public:
 
 	virtual void InstrumentUsed() override;
 
+
 	UFUNCTION(BlueprintCallable, Category = "Instrument|Action Instrument", meta = (DisplayName = "Fill In"))
 		void Fill();
 
@@ -39,5 +40,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Instrument|Action Instrument", meta = (DisplayName = "On Emptied"))
 		void OnEmptied();
+
+	UFUNCTION(BlueprintCallable)
+		void SetUsePossibility();
 
 };

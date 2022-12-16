@@ -21,13 +21,26 @@ void UCoreActionInstruments::InstrumentUsed()
 	}
 
 	else
+	{
+		IsPossibleToUse = false;
+		filling = 0.f;
 		OnEmptied();
-
+		
+	}
 }
 
 void UCoreActionInstruments::Fill()
 {
 	filling = 100;
 	OnFilled();
+	IsPossibleToUse = true;
 
+}
+
+void UCoreActionInstruments::SetUsePossibility()
+{
+	if (filling > 0)
+		IsPossibleToUse = true;
+	else
+		IsPossibleToUse = false;
 }

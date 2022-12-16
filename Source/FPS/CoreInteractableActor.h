@@ -29,6 +29,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (DisplayName = "Static Mesh"))
 		UStaticMeshComponent* VisualMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FKey InteractKey;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FText InteractText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FKey UseKey;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FText UseText;
+	
+
 	UFUNCTION(BlueprintNativeEvent)
 		void InteractCheck(UCoreInstrumentObject_* Instrument, bool& Success);
 	
